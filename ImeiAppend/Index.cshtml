@@ -1,0 +1,417 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+<style>
+
+    
+    table thead tr {
+        background-color: darkslategray;
+        color: whitesmoke;
+        font-weight: bold;
+    }
+
+    table tbody tr {
+        color: #2F4F4F;
+        font-weight: bold;
+    }
+   
+
+</style>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card" id="card" style="height: 550px; overflow-y: auto">
+                <div class="card-close">
+
+                </div>
+                <div class="card-header d-flex align-items-center" style="background-color: darkslategray; color: white">
+                    <h3 class="h4">IMEI</h3>
+                </div>
+
+
+                <div class="card-body">
+                    <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-control-label">Model Name</label>
+                            <div class="col-sm-5" id="">
+                                <select id="txtModel" data-placeholder="Choose Model Name" class="chosen-select form-control" tabindex="1" ></select>
+
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-control-label">Color</label>
+                            <div class="col-sm-5" id="">
+                                <select id="txtColor" data-placeholder="Choose Color Name" class="chosen-select form-control" tabindex="1"></select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-control-label">Type</label>
+                            <div class="col-sm-5" id="">
+                                <select id="txtType" data-placeholder="Choose Type Name" class="chosen-select form-control" tabindex="1"></select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-control-label">IMEI 1</label>
+                            <div class="col-sm-5" id="mbCode">
+                                <input id="txtImei1" name="txtImei1" type="text" placeholder=" Scan IMEI 1" required="" class="form-control form-control-success">
+                            </div>
+
+
+
+                        </div>
+                        <div class="form-group row" id="divImei1" style="">
+                            <label class="col-sm-3 form-control-label">Imei 2</label>
+                            <div class="col-sm-5">
+                                <input id="txtImei2" name="txtImei2" type="text" placeholder="Scan IMEI 2 " required="" class="form-control form-control-success">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card" id="card" style="height: 550px;  overflow-y: auto">
+
+
+                    <div class="card-body">
+                        <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+
+                            <div class="form-group row">
+
+                                <table class="table table-bordered table-hover" id="appendTable" style=" ">
+                                    <thead>
+                                        <tr>
+                                            <th style="display: none">Model</th>
+                                            <th style="display: none">Color</th>
+                                            <th>IMEI 1</th>
+                                            <th>IMEI 2</th>
+                                            <th>Delete</th>
+
+                                        </tr>
+                                    </thead>
+
+                                    <tbody class="tbody" style="color: black"></tbody>
+
+
+                                </table>
+
+                                <div class="form-group row">
+                                    &nbsp; &nbsp;
+                                </div>
+                                <div class="form-group row">
+                                    &nbsp; &nbsp;
+                                </div>
+                                <div class="form-group row">
+                                    &nbsp; &nbsp;
+                                </div>
+
+                            </div>
+
+
+
+
+
+                                
+                                
+
+
+                        </div>
+                        
+                        
+                        <div class="form-group row" style="">
+                            <label class="col-lg-10 form-control-label">&nbsp; &nbsp;</label>
+               
+                                <button class="btn btn-primary" id="btnSave" style="width: 100px;"> Save</button>
+
+
+                         
+                        </div>
+
+                    </div>
+                    
+
+                  
+                </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+
+<link href="~/js/vendor/JqueryChoosen/chosen-bootstrap.css" rel="stylesheet" />
+<link href="~/js/vendor/JqueryChoosen/chosen.css" rel="stylesheet" />
+<link href="~/css/iziToast.min.css" rel="stylesheet" />
+<script src="~/js/iziToast.min.js"></script>
+<script src="~/js/vendor/Jquery/jquery.min.js"></script>
+<script src="~/js/vendor/JqueryChoosen/chosen.jquery.min.js"></script>
+
+<script>
+    
+    $(document).ready(function () {
+
+        LoadModel();
+        LoadColor();
+
+    });
+
+    $("#txtImei1").focus();
+    $("#txtImei1").keydown(function () {
+        //debugger;
+        var imei1 = $("#txtImei1").val();
+        if (imei1.length == 15) {
+            $("#txtImei2").focus();
+        }
+    });
+
+
+
+
+  
+    $("#txtImei2").keydown(function () {
+       
+        
+        var imei1 = $("#txtImei1").val();
+        var imei2 = $("#txtImei2").val();
+        if (imei2.length == 15) {
+
+
+      
+        var isExist = false;
+
+        $('#appendTable  tbody').find("tr").each(function (roww, tr) {
+
+            debugger;
+
+            if (($(tr).find('td:eq(0)').text() == imei1 || $(tr).find('td:eq(1)').text() == imei1)) {                                   
+                isExist = true;
+                return false;
+
+            }
+
+
+        });
+
+        if (!isExist) {
+           
+
+       
+            var table = document.getElementById("appendTable").getElementsByTagName('tbody')[0];
+
+            var newRow = table.insertRow(table.length);
+            //var cell1 = newRow.insertCell(0);
+            //cell1.innerHTML = model;
+         
+            //var cell2 = newRow.insertCell(1);
+            //cell2.innerHTML = color;
+            
+            var cell3 = newRow.insertCell(0);
+            cell3.innerHTML = imei1;
+
+            var cell4 = newRow.insertCell(1);
+            cell4.innerHTML = imei2;
+            
+            var cell5 = newRow.insertCell(2);
+            cell5.innerHTML = '<button class="btn btn-danger" onClick="onDelete(this)">Delete</button>';
+           
+           
+            Clear();
+
+        }
+
+         else {
+            iziToast.error({
+                timeout: 2000,
+                imageWidth: 150,
+                position: 'center',
+                title: 'Error',
+                message: 'Already added'
+               
+            });
+            Clear();
+          
+            return false;
+        }
+  
+        }
+
+    });
+
+
+    $("#btnSave").click(function () {
+        debugger;
+        var imeiNumber = [];
+
+        var color = $("#txtColor option:selected").text();
+        
+        var model = $("#txtModel option:selected").text();
+
+        //alert(color);
+        
+
+       // var color = $("#txtColor option:selected").text();
+        $('#appendTable tbody').find("tr").each(function (row, tr) {
+
+            imeiNumber.push({
+
+                Model:model,
+                Color:color,
+                IMEI1: $(tr).find('td:eq(0)').text(),
+                IMEI2: $(tr).find('td:eq(1)').text()
+
+            });
+        });
+        console.log(imeiNumber);
+        debugger;
+        $.ajax({
+            url: '@Url.Action("InsertImeiInfo", "ImeiAppend")', //changed For Test
+            type: 'Post',
+            data: JSON.stringify({ imeiNumber: imeiNumber}),
+            dataType: 'json',
+            async: false,
+            contentType: 'application/json',
+            success: function () {
+
+                iziToast.success({
+                    timeout: 2000,
+                    imageWidth: 150,
+                    position: 'center',
+                    title: 'Success',
+                    message: 'Information Saved Successfully'
+
+                });
+
+                $("tbody").children().remove();
+            },
+        });
+
+    });
+
+
+
+
+
+
+
+    function onDelete(td) {
+        if (confirm('Are you sure to delete this record ?')) {
+            row = td.parentElement.parentElement;
+            document.getElementById("appendTable").deleteRow(row.rowIndex);
+            resetForm();
+        }
+    }
+
+    function Clear() {
+       
+        $('#txtImei1').val('');
+        $('#txtImei2').val('');
+        $("#txtImei1").focus();
+    }
+    
+
+    
+    function LoadModel() {
+        debugger;
+
+        var url = " @Url.Action("GetModelName", "ImeiAppend")";
+        $.getJSON(url, function(json) {
+            var elem = $("#txtModel");
+            $("#txtModel").chosen("destroy");
+            elem.empty();
+
+            elem.append("<option value='0'>---Select---</option>");
+
+            $.each(json, function(idx, obj) {
+
+                elem.append('<option value="' + obj.Id + '">' + obj.value + '</option>');
+            });
+
+            elem.chosen({ width: "100%", height: "10px" });
+
+
+        });
+    }
+    function LoadColor() {
+        debugger;
+
+        var url = " @Url.Action("GetColorName", "ImeiAppend")";
+        $.getJSON(url, function(json) {
+            var elem = $("#txtColor");
+            $("#txtColor").chosen("destroy");
+            elem.empty();
+
+            elem.append("<option value='0'>---Select---</option>");
+
+            $.each(json, function(idx, obj) {
+
+                elem.append('<option value="' + obj.colorId + '">' + obj.value + '</option>');
+            });
+
+            elem.chosen({ width: "100%", height: "10px" });
+
+
+        });
+    }
+    
+   
+
+    $("#txtModel").change(function() {
+        debugger;
+        var tblLength = $("#appendTable > tbody > tr ").length;
+        if (tblLength > 0) {
+
+            iziToast.show({
+                theme: 'dark',
+                balloon: false,
+                title: 'Wait!!',
+                message: ' Are you sure added a new model ? ',
+                position: 'center', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+                progressBarColor: 'rgb(0, 255, 184)',
+                buttons: [
+                    ['<button>Yes</button>', function (instance, toast) {
+                        instance.hide({
+                            transitionOut: 'fadeOutUp',
+                            onClosing: function (instance, toast, closedBy) {
+                                console.info('closedBy: ' + closedBy); // The return will be: 'closedBy: buttonName'
+                            }
+                        }, toast, 'buttonName');
+                       
+                        $("tbody").children().remove();
+
+                    }, true], // true to focus
+                    ['<button>No</button>', function (instance, toast) {
+                        instance.hide({
+                            transitionOut: 'fadeOutUp',
+                            onClosing: function (instance, toast, closedBy) {
+                                console.info('closedBy: ' + closedBy); // The return will be: 'closedBy: buttonName'
+                            }
+                        }, toast, 'buttonName');
+                    }]
+                ],
+                onOpening: function (instance, toast) {
+                    console.info('callback abriu!');
+                },
+                onClosing: function (instance, toast, closedBy) {
+                    console.info('closedBy: ' + closedBy); // tells if it was closed by 'drag' or 'button'
+                }
+            });
+      
+        }
+    });
+
+</script>
